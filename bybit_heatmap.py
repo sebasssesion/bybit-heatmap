@@ -49,7 +49,10 @@ def merge_liquidations():
     heatmap = liquidations.groupby(["price_bin", "side"])["size"].sum().unstack(fill_value=0)
     top_long = heatmap["buy"].idxmax() if "buy" in heatmap else None
     top_short = heatmap["sell"].idxmax() if "sell" in heatmap else None
-    return {"long_liq": float(top_long) if top_long, "short_liq": float(top_short) if top_short else 0}
+    return {
+        "long_liq": float(top_long) if top_long else 0.0,
+        "short_liq": float(top_short) if top_short else 0.0
+    }
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
