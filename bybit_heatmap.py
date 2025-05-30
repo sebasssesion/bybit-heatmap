@@ -11,9 +11,14 @@ EXCHANGE_APIS = {
     "okx": "https://www.okx.com/api/v5/market/trades?instId=BTC-USDT-SWAP&limit=500"
 }
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+}
+
 def fetch_trades(exchange):
     try:
-        response = requests.get(EXCHANGE_APIS[exchange], timeout=5)
+        time.sleep(2)  # Rate limiting: 2-second delay between requests
+        response = requests.get(EXCHANGE_APIS[exchange], headers=HEADERS, timeout=5)
         if response.status_code != 200:
             print(f"{exchange} error: {response.status_code}")
             return None
