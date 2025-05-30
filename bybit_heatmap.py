@@ -45,7 +45,8 @@ def merge_liquidations():
     liquidations = merged_df[merged_df["size"] > 0.1]
     if liquidations.empty:
         return None
-    liquidations["price_bin"] = (liquidations["price"] // 100) * 100
+    # Use .loc to avoid SettingWithCopyWarning
+    liquidations.loc[:, "price_bin"] = (liquidations["price"] // 100) * 100
     heatmap = liquidations.groupby(["price_bin", "side"])["size"].sum().unstack(fill_value=0)
     top_long = heatmap["buy"].idxmax() if "buy" in heatmap else None
     top_short = heatmap["sell"].idxmax() if "sell" in heatmap else None
